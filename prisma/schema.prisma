@@ -8,11 +8,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admin {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum role {
+  admin
+  user
+}
+
+model user {
+  id         String    @id @db.Uuid
+  email      String?   @unique
+  phone      String?   @unique
+  name       String?
+  avatar_url String?
+  role       role      @default(user)
+  created_at DateTime? @db.Timestamptz
+  updated_at DateTime? @db.Timestamptz
+
+  @@map("user")
 }
