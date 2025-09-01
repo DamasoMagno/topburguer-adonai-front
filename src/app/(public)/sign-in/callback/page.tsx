@@ -1,4 +1,3 @@
-// app/auth/callback/page.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -19,7 +18,7 @@ export default function AuthCallback() {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        router.replace("/"); // redireciona após login bem-sucedido
+        router.replace("/");
       } else {
         router.replace("/error");
       }

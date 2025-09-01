@@ -22,6 +22,61 @@ model user {
   role       role      @default(user)
   created_at DateTime? @db.Timestamptz
   updated_at DateTime? @db.Timestamptz
+  order      order[]
 
   @@map("user")
+}
+
+model product {
+  id          String       @id @db.Uuid
+  name        String
+  description String?
+  price       Float
+  image_url   String?
+  created_at  DateTime?    @db.Timestamptz
+  updated_at  DateTime?    @db.Timestamptz
+  categoryId  String
+  category    category     @relation(fields: [categoryId], references: [id])
+  order_item  order_item[]
+
+  @@map("product")
+}
+
+model category {
+  id          String    @id @db.Uuid
+  name        String
+  description String?
+  created_at  DateTime? @db.Timestamptz
+  updated_at  DateTime? @db.Timestamptz
+
+  product product[]
+
+  @@map("category")
+}
+
+model order {
+  id         String    @id @db.Uuid
+  userId     String
+  total      Float
+  status     String    @default("pending")
+  created_at DateTime? @db.Timestamptz
+  updated_at DateTime? @db.Timestamptz
+
+  user       user         @relation(fields: [userId], references: [id])
+  order_item order_item[]
+
+  @@map("order")
+}
+
+model order_item {
+  id        String @id @db.Uuid
+  orderId   String
+  productId String
+  quantity  Int    @default(1)
+  price     Float
+
+  order   order   @relation(fields: [orderId], references: [id])
+  product product @relation(fields: [productId], references: [id])
+
+  @@map("order_item")
 }
